@@ -1,7 +1,18 @@
 <template>
   <v-container class="page">
-    <div class="posts-wrapper d-flex flex-column align-stretch">
-      <div class="posts flex-grow-1 mb-8">
+    <v-tabs
+      v-model="tab"
+      align-tabs="center"
+      color="deep-purple-accent-4"
+      class="mb-8"
+    >
+      <v-tab :value="1">Все публикации</v-tab>
+      <v-tab :value="2">Выбранные</v-tab>
+      <v-tab :value="3">Скрытые</v-tab>
+    </v-tabs>
+
+    <div class="posts-wrapper mb-8">
+      <div class="posts">
         <post-card
           :key="index"
           v-for="(post, index) in slicePosts"
@@ -12,7 +23,7 @@
 
       <v-spacer />
 
-      <div class="text-center flex-grow-1">
+      <div class="text-center">
         <v-pagination
           v-model="page"
           :length="pagesCount"
@@ -69,10 +80,8 @@ const page = computed({
     });
   },
 });
+
+const tab = ref(1);
 </script>
 
-<style scoped>
-.posts-wrapper {
-  min-height: 100vh;
-}
-</style>
+<style scoped></style>
