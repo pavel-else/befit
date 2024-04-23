@@ -10,6 +10,7 @@
         density="compact"
         color="deep-purple-accent-4"
         icon="mdi-thumb-up"
+        @click="unlikePost(value.id)"
       ></v-btn>
       <v-btn
         v-else
@@ -23,6 +24,7 @@
         density="compact"
         color="deep-purple-accent-4"
         icon="mdi-thumb-down"
+        @click="unlikePost(value.id)"
       ></v-btn>
       <v-btn
         density="compact"
@@ -38,7 +40,7 @@
 import type { Post } from "../types/post";
 import { useAppStore } from "../stores/app";
 
-const { likePost, dislikePost } = useAppStore();
+const { likePost, dislikePost, unlikePost } = useAppStore();
 
 defineProps<{ value: Post }>();
 </script>

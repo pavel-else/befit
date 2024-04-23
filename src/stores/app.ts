@@ -23,6 +23,11 @@ export const useAppStore = defineStore("app", () => {
     post.rating = -1;
   };
 
+  const unlikePost = (id: number) => {
+    const post = postsById.value[id];
+    post.rating = 0;
+  };
+
   const fetchPosts = async () => {
     try {
       const response = await fetch(
@@ -56,6 +61,7 @@ export const useAppStore = defineStore("app", () => {
     unlikedPosts,
     likePost,
     dislikePost,
+    unlikePost,
     fetchPosts,
   };
 });
