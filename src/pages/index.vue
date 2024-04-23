@@ -7,31 +7,55 @@
       class="mb-8"
     >
       <v-tab :value="1">Все публикации</v-tab>
-      <v-tab :value="2">Выбранные</v-tab>
-      <v-tab :value="3">Скрытые</v-tab>
+      <v-tab :value="2" :disabled="!likedPosts.length">Выбранные</v-tab>
+      <v-tab :value="3" :disabled="!unlikedPosts.length">Скрытые</v-tab>
     </v-tabs>
 
-    <div class="posts-wrapper mb-8">
-      <div class="posts">
-        <post-card
-          :key="index"
-          v-for="(post, index) in slicePosts"
-          :value="post"
-          class="mb-8 rounded-lg"
-        />
-      </div>
+    <v-window v-model="tab">
+      <v-window-item :value="1">
+        <div class="posts-wrapper mb-8">
+          <div class="posts">
+            <post-card
+              :key="index"
+              v-for="(post, index) in slicePosts"
+              :value="post"
+              class="mb-8 rounded-lg"
+            />
+          </div>
 
-      <v-spacer />
+          <v-spacer />
 
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="pagesCount"
-          rounded="circle"
-          :disabled="loading"
-        ></v-pagination>
-      </div>
-    </div>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="pagesCount"
+              rounded="circle"
+              :disabled="loading"
+            ></v-pagination>
+          </div>
+        </div>
+      </v-window-item>
+      <v-window-item :value="2">
+        <div class="posts">
+          <post-card
+            :key="index"
+            v-for="(post, index) in likedPosts"
+            :value="post"
+            class="mb-8 rounded-lg"
+          />
+        </div>
+      </v-window-item>
+      <v-window-item :value="3">
+        <div class="posts">
+          <post-card
+            :key="index"
+            v-for="(post, index) in unlikedPosts"
+            :value="post"
+            class="mb-8 rounded-lg"
+          />
+        </div>
+      </v-window-item>
+    </v-window>
   </v-container>
 </template>
 
@@ -44,7 +68,7 @@ import { useRoute, useRouter } from "vue-router";
 const postsPerPage = 5;
 
 const { fetchPosts } = useAppStore();
-const { posts } = storeToRefs(useAppStore());
+const { posts, likedPosts, unlikedPosts } = storeToRefs(useAppStore());
 
 const loading = ref(false);
 const pagesCount = ref(0);
@@ -59,9 +83,11 @@ onMounted(async () => {
 });
 
 const slicePosts = computed(() => {
+  const clearPosts = posts.value.filter((post) => !post.isLiked);
+
   const from = (page.value ? Number(page.value) - 1 : 0) * postsPerPage;
   const to = from + postsPerPage;
-  return posts.value.slice(from, to);
+  return clearPosts.slice(from, to);
 });
 
 const route = useRoute();
