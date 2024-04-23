@@ -3,6 +3,5 @@ export interface Post {
   id: number;
   title: string;
   body: string;
-  isLiked: boolean;
-  isUnliked: boolean;
+  rating: 1 | 0 | -1;
 }

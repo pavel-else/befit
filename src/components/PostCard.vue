@@ -6,29 +6,29 @@
     <v-card-actions>
       <v-spacer />
       <v-btn
-        v-if="!value.isLiked"
-        density="compact"
-        icon="mdi-thumb-up-outline"
-        @click="likePost(value.id)"
-      ></v-btn>
-      <v-btn
-        v-else
+        v-if="value.rating > 0"
         density="compact"
         color="deep-purple-accent-4"
         icon="mdi-thumb-up"
       ></v-btn>
-
-      <v-btn
-        density="compact"
-        icon="mdi-thumb-down-outline"
-        v-if="!value.isUnliked"
-        @click="unlikePost(value.id)"
-      ></v-btn>
       <v-btn
         v-else
         density="compact"
+        icon="mdi-thumb-up-outline"
+        @click="likePost(value.id)"
+      ></v-btn>
+
+      <v-btn
+        v-if="value.rating < 0"
+        density="compact"
         color="deep-purple-accent-4"
         icon="mdi-thumb-down"
+      ></v-btn>
+      <v-btn
+        density="compact"
+        icon="mdi-thumb-down-outline"
+        v-else
+        @click="dislikePost(value.id)"
       ></v-btn>
     </v-card-actions>
   </v-card>
@@ -38,7 +38,7 @@
 import type { Post } from "../types/post";
 import { useAppStore } from "../stores/app";
 
-const { likePost, unlikePost } = useAppStore();
+const { likePost, dislikePost } = useAppStore();
 
 defineProps<{ value: Post }>();
 </script>

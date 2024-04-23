@@ -5,8 +5,6 @@ import { ref, computed } from "vue";
 
 export const useAppStore = defineStore("app", () => {
   const posts = ref<Post[]>([]);
-  const likedPostsIds = ref(new Set<number>());
-  const unlikedPostsIds = ref(new Set<number>());
 
   const postsById = computed(() => {
     return posts.value.reduce((acc, post) => {
@@ -16,17 +14,13 @@ export const useAppStore = defineStore("app", () => {
   });
 
   const likePost = (id: number) => {
-    likedPostsIds.value.add(id);
     const post = postsById.value[id];
-    post.isLiked = true;
-    console.log(likedPostsIds.value);
+    post.rating = 1;
   };
 
-  const unlikePost = (id: number) => {
-    likedPostsIds.value.delete(id);
+  const dislikePost = (id: number) => {
     const post = postsById.value[id];
-    post.isUnliked = true;
-    console.log(unlikedPostsIds.value);
+    post.rating = -1;
   };
 
   const fetchPosts = async () => {
@@ -38,8 +32,7 @@ export const useAppStore = defineStore("app", () => {
 
       posts.value = json.map((post) => ({
         ...post,
-        isLiked: false,
-        isUnliked: false,
+        rating: 0,
       }));
     } catch (error) {
       console.error(error);
@@ -49,22 +42,20 @@ export const useAppStore = defineStore("app", () => {
   };
 
   const likedPosts = computed(() => {
-    return posts.value.filter((post) => likedPostsIds.value.has(post.id));
+    return posts.value.filter((post) => post.rating > 0);
   });
 
   const unlikedPosts = computed(() => {
-    return posts.value.filter((post) => unlikedPostsIds.value.has(post.id));
+    return posts.value.filter((post) => post.rating < 0);
   });
 
   return {
     posts,
     postsById,
-    likedPostsIds,
-    unlikedPostsIds,
     likedPosts,
     unlikedPosts,
     likePost,
-    unlikePost,
+    dislikePost,
     fetchPosts,
   };
 });

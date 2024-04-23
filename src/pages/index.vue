@@ -31,6 +31,7 @@
               :length="pagesCount"
               rounded="circle"
               :disabled="loading"
+              active-color="deep-purple-accent-4"
             ></v-pagination>
           </div>
         </div>
@@ -83,7 +84,7 @@ onMounted(async () => {
 });
 
 const slicePosts = computed(() => {
-  const clearPosts = posts.value.filter((post) => !post.isLiked);
+  const clearPosts = posts.value.filter((post) => post.rating === 0);
 
   const from = (page.value ? Number(page.value) - 1 : 0) * postsPerPage;
   const to = from + postsPerPage;
