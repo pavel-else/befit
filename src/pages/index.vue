@@ -19,7 +19,7 @@
               :key="index"
               v-for="(post, index) in slicePosts"
               :value="post"
-              class="mb-8 rounded-lg"
+              class="rounded-lg"
             />
           </div>
 
@@ -84,11 +84,9 @@ onMounted(async () => {
 });
 
 const slicePosts = computed(() => {
-  const clearPosts = posts.value.filter((post) => post.rating === 0);
-
   const from = (page.value ? Number(page.value) - 1 : 0) * postsPerPage;
   const to = from + postsPerPage;
-  return clearPosts.slice(from, to);
+  return posts.value.slice(from, to);
 });
 
 const route = useRoute();
@@ -111,4 +109,10 @@ const page = computed({
 const tab = ref(1);
 </script>
 
-<style scoped></style>
+<style scoped>
+.posts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px 16px;
+}
+</style>
